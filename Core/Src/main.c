@@ -18,12 +18,15 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "icache.h"
 #include "memorymap.h"
+#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "i2c-lcd.h"
 
 /* USER CODE END Includes */
 
@@ -89,7 +92,16 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ICACHE_Init();
+  MX_I2C1_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+
+  //LCD
+  lcd_init();
+  lcd_clear();
+  HAL_Delay(50);
+  lcd_send_string("parking");
+  HAL_Delay(500);
 
   /* USER CODE END 2 */
 
@@ -97,6 +109,93 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	HAL_Delay(10);
+	int p1 = HAL_GPIO_ReadPin(GPIOG, P1_Pin);
+	if(p1==1)
+	{
+		HAL_GPIO_WritePin(GPIOE, P1_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOA, P1_G_Pin, 0);
+	}
+	else if(p1==0)
+	{
+		HAL_GPIO_WritePin(GPIOA, P1_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, P1_R_Pin, 0);
+	}
+
+	int p2 = HAL_GPIO_ReadPin(GPIOD, P2_Pin);
+	if(p2==1)
+	{
+		HAL_GPIO_WritePin(GPIOB, P2_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOB, P2_G_Pin, 0);
+	}
+	else if(p2==0)
+	{
+		HAL_GPIO_WritePin(GPIOB, P2_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOB, P2_R_Pin, 0);
+	}
+
+	int p3 = HAL_GPIO_ReadPin(GPIOD, P3_Pin);
+	if(p3==1)
+	{
+		HAL_GPIO_WritePin(GPIOA, P3_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, P3_G_Pin, 0);
+	}
+	else if(p3==0)
+	{
+		HAL_GPIO_WritePin(GPIOE, P3_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOA, P3_R_Pin, 0);
+	}
+
+	int p4 = HAL_GPIO_ReadPin(GPIOF, P4_Pin);
+	if(p4==1)
+	{
+		HAL_GPIO_WritePin(GPIOE, P4_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, P4_G_Pin, 0);
+	}
+	else if(p4==0)
+	{
+		HAL_GPIO_WritePin(GPIOE, P4_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, P4_R_Pin, 0);
+	}
+
+	int p5 = HAL_GPIO_ReadPin(GPIOF, P5_Pin);
+	if(p5==1)
+	{
+		HAL_GPIO_WritePin(GPIOD, P5_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, P5_G_Pin, 0);
+	}
+	else if(p5==0)
+	{
+		HAL_GPIO_WritePin(GPIOE, P5_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOD, P5_R_Pin, 0);
+	}
+
+	int p6i1 = HAL_GPIO_ReadPin(GPIOF, P6I1_Pin);
+	if(p6i1==1)
+	{
+		HAL_GPIO_WritePin(GPIOA, P6I1_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOD, P6I1_G_Pin, 0);
+	}
+	else if(p6i1==0)
+	{
+		HAL_GPIO_WritePin(GPIOD, P6I1_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOA, P6I1_R_Pin, 0);
+	}
+
+	int p7i2 = HAL_GPIO_ReadPin(GPIOE, P7I2_Pin);
+	if(p7i2==1)
+	{
+		HAL_GPIO_WritePin(GPIOC, P7I2_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOD, P7I2_G_Pin, 0);
+	}
+	else if(p7i2==0)
+	{
+		HAL_GPIO_WritePin(GPIOD, P7I2_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOC, P7I2_R_Pin, 0);
+	}
+
+
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
