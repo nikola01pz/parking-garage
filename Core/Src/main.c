@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os2.h"
 #include "i2c.h"
 #include "icache.h"
 #include "memorymap.h"
@@ -53,6 +54,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -98,200 +100,23 @@ int main(void)
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 
-  //LCD
-  lcd_init();
-  HAL_Delay(50);
-  lcd_send_string("parking 2");
-  HAL_Delay(500);
-
   /* USER CODE END 2 */
+
+  /* Init scheduler */
+  osKernelInitialize();
+
+  /* Call init function for freertos objects (in app_freertos.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	int x= 0;
-	for(x=250; x<750; x=x+1)
-	{
-		__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1, x);
-		__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2, x);
-		HAL_Delay(5);
-	}
-
-	int r1 = 0, r2 = 0;
-	r1 = HAL_GPIO_ReadPin(GPIOG, RAMP_ENTER_Pin);
-	r2 = HAL_GPIO_ReadPin(GPIOB, RAMP_EXIT_Pin);
-
-	HAL_Delay(10);
-	int p1 = HAL_GPIO_ReadPin(GPIOE, P1_Pin);
-	if(p1==1)
-	{
-		HAL_GPIO_WritePin(GPIOB, P1_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOA, P1_G_Pin, 0);
-	}
-	else if(p1==0)
-	{
-		HAL_GPIO_WritePin(GPIOB, P1_R_Pin, 0);
-		HAL_GPIO_WritePin(GPIOA, P1_G_Pin, 1);
-	}
-
-	int p2 = HAL_GPIO_ReadPin(GPIOB, P2_Pin);
-	if(p2==1)
-	{
-		HAL_GPIO_WritePin(GPIOA, P2_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P2_G_Pin, 0);
-	}
-	else if(p2==0)
-	{
-		HAL_GPIO_WritePin(GPIOE, P2_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOA, P2_R_Pin, 0);
-	}
-
-	int p3 = HAL_GPIO_ReadPin(GPIOD, P3_Pin);
-	if(p3==1)
-	{
-		HAL_GPIO_WritePin(GPIOE, P3_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P3_G_Pin, 0);
-	}
-	else if(p3==0)
-	{
-		HAL_GPIO_WritePin(GPIOE, P3_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P3_R_Pin, 0);
-	}
-
-	int p4 = HAL_GPIO_ReadPin(GPIOD, P4_Pin);
-	if(p4==1)
-	{
-		HAL_GPIO_WritePin(GPIOE, P4_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P4_G_Pin, 0);
-	}
-	else if(p4==0)
-	{
-		HAL_GPIO_WritePin(GPIOE, P4_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P4_R_Pin, 0);
-	}
-
-	int p5 = HAL_GPIO_ReadPin(GPIOB, P5_Pin);
-	if(p5==1)
-	{
-		HAL_GPIO_WritePin(GPIOD, P5_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P5_G_Pin, 0);
-	}
-	else if(p5==0)
-	{
-		HAL_GPIO_WritePin(GPIOE, P5_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOD, P5_R_Pin, 0);
-	}
-
-	int p6 = HAL_GPIO_ReadPin(GPIOB, P6_Pin);
-	if(p6==1)
-	{
-		HAL_GPIO_WritePin(GPIOB, P6_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOA, P6_G_Pin, 0);
-	}
-	else if(p6==0)
-	{
-		HAL_GPIO_WritePin(GPIOA, P6_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOB, P6_R_Pin, 0);
-	}
-
-	int p7 = HAL_GPIO_ReadPin(GPIOF, P7_Pin);
-	if(p7==1)
-	{
-		HAL_GPIO_WritePin(GPIOF, P7_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOG, P7_G_Pin, 0);
-	}
-	else if(p7==0)
-	{
-		HAL_GPIO_WritePin(GPIOG, P7_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOF, P7_R_Pin, 0);
-	}
-
-	int p8 = HAL_GPIO_ReadPin(GPIOE, P8_Pin);
-	if(p8==1)
-	{
-		HAL_GPIO_WritePin(GPIOE, P8_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOG, P8_G_Pin, 0);
-	}
-	else if(p8==0)
-	{
-		HAL_GPIO_WritePin(GPIOG, P8_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P8_R_Pin, 0);
-	}
-
-	int p9 = HAL_GPIO_ReadPin(GPIOE, P9_Pin);
-	if(p9==1)
-	{
-		HAL_GPIO_WritePin(GPIOE, P9_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOG, P9_G_Pin, 0);
-	}
-	else if(p9==0)
-	{
-		HAL_GPIO_WritePin(GPIOG, P9_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P9_R_Pin, 0);
-	}
-
-	int p10 = HAL_GPIO_ReadPin(GPIOF, P10_Pin);
-	if(p10==1)
-	{
-		HAL_GPIO_WritePin(GPIOD, P10_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 0);
-	}
-	else if(p10==0)
-	{
-		HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOD, P10_R_Pin, 0);
-	}
-
-	int p11 = HAL_GPIO_ReadPin(GPIOG, P11_Pin);
-	if(p11==1)
-	{
-		HAL_GPIO_WritePin(GPIOG, P11_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOD, P11_G_Pin, 0);
-	}
-	else if(p11==0)
-	{
-		HAL_GPIO_WritePin(GPIOD, P11_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOG, P11_R_Pin, 0);
-	}
-
-	int p12 = HAL_GPIO_ReadPin(GPIOD, P12_Pin);
-	if(p12==1)
-	{
-		HAL_GPIO_WritePin(GPIOF, P12_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOF, P12_G_Pin, 0);
-	}
-	else if(p12==0)
-	{
-		HAL_GPIO_WritePin(GPIOF, P12_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOF, P12_R_Pin, 0);
-	}
-
-//	int p6i1 = HAL_GPIO_ReadPin(GPIOF, P6I1_Pin);
-//	if(p6i1==1)
-//	{
-//		HAL_GPIO_WritePin(GPIOA, P6I1_R_Pin, 1);
-//		HAL_GPIO_WritePin(GPIOD, P6I1_G_Pin, 0);
-//	}
-//	else if(p6i1==0)
-//	{
-//		HAL_GPIO_WritePin(GPIOD, P6I1_G_Pin, 1);
-//		HAL_GPIO_WritePin(GPIOA, P6I1_R_Pin, 0);
-//	}
-//
-//	int p7i2 = HAL_GPIO_ReadPin(GPIOE, P7I2_Pin);
-//	if(p7i2==1)
-//	{
-//		HAL_GPIO_WritePin(GPIOC, P7I2_R_Pin, 1);
-//		HAL_GPIO_WritePin(GPIOD, P7I2_G_Pin, 0);
-//	}
-//	else if(p7i2==0)
-//	{
-//		HAL_GPIO_WritePin(GPIOD, P7I2_G_Pin, 1);
-//		HAL_GPIO_WritePin(GPIOC, P7I2_R_Pin, 0);
-//	}
-
-
 
     /* USER CODE END WHILE */
 
@@ -318,16 +143,17 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_CSI;
+  RCC_OscInitStruct.CSIState = RCC_CSI_ON;
+  RCC_OscInitStruct.CSICalibrationValue = RCC_CSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLL1_SOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 250;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLL1_SOURCE_CSI;
+  RCC_OscInitStruct.PLL.PLLM = 1;
+  RCC_OscInitStruct.PLL.PLLN = 125;
   RCC_OscInitStruct.PLL.PLLP = 2;
   RCC_OscInitStruct.PLL.PLLQ = 2;
   RCC_OscInitStruct.PLL.PLLR = 2;
-  RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1_VCIRANGE_1;
+  RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1_VCIRANGE_2;
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1_VCORANGE_WIDE;
   RCC_OscInitStruct.PLL.PLLFRACN = 0;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -359,6 +185,28 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM6 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM6)
+  {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

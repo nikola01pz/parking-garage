@@ -1,0 +1,5 @@
+../Core/Src/app_freertos.c:77:6:MX_FREERTOS_Init	1
+../Core/Src/app_freertos.c:119:6:StartRampControlTask	3
+../Core/Src/app_freertos.c:162:6:StartParkingControlTask	1
+../Core/Src/app_freertos.c:176:6:check_capacity	25
+../Core/Src/app_freertos.c:323:6:raise_ramp	13
