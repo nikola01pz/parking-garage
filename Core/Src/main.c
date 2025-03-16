@@ -95,6 +95,8 @@ int main(void)
   MX_TIM3_Init();
   MX_ICACHE_Init();
   /* USER CODE BEGIN 2 */
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 
   //LCD
   lcd_init();
@@ -108,6 +110,18 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	int x= 0;
+	for(x=250; x<750; x=x+1)
+	{
+		__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1, x);
+		__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2, x);
+		HAL_Delay(5);
+	}
+
+	int r1 = 0, r2 = 0;
+	r1 = HAL_GPIO_ReadPin(GPIOG, RAMP_ENTER_Pin);
+	r2 = HAL_GPIO_ReadPin(GPIOB, RAMP_EXIT_Pin);
+
 	HAL_Delay(10);
 	int p1 = HAL_GPIO_ReadPin(GPIOE, P1_Pin);
 	if(p1==1)

@@ -49,6 +49,7 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, P3_G_Pin|P4_R_Pin|P5_G_Pin|P9_R_Pin
@@ -98,8 +99,8 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : P2_Pin P5_Pin P6_Pin */
-  GPIO_InitStruct.Pin = P2_Pin|P5_Pin|P6_Pin;
+  /*Configure GPIO pins : P2_Pin P5_Pin RAMP_EXIT_Pin P6_Pin */
+  GPIO_InitStruct.Pin = P2_Pin|P5_Pin|RAMP_EXIT_Pin|P6_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -111,11 +112,11 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : P11_Pin */
-  GPIO_InitStruct.Pin = P11_Pin;
+  /*Configure GPIO pins : P11_Pin RAMP_ENTER_Pin */
+  GPIO_InitStruct.Pin = P11_Pin|RAMP_ENTER_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(P11_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
   /*Configure GPIO pins : P9_Pin P8_Pin P1_Pin */
   GPIO_InitStruct.Pin = P9_Pin|P8_Pin|P1_Pin;
