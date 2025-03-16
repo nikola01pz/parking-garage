@@ -91,16 +91,15 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_ICACHE_Init();
   MX_I2C1_Init();
   MX_TIM3_Init();
+  MX_ICACHE_Init();
   /* USER CODE BEGIN 2 */
 
   //LCD
   lcd_init();
-  lcd_clear();
   HAL_Delay(50);
-  lcd_send_string("parking");
+  lcd_send_string("parking 2");
   HAL_Delay(500);
 
   /* USER CODE END 2 */
@@ -110,43 +109,43 @@ int main(void)
   while (1)
   {
 	HAL_Delay(10);
-	int p1 = HAL_GPIO_ReadPin(GPIOG, P1_Pin);
+	int p1 = HAL_GPIO_ReadPin(GPIOE, P1_Pin);
 	if(p1==1)
 	{
-		HAL_GPIO_WritePin(GPIOE, P1_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOB, P1_R_Pin, 1);
 		HAL_GPIO_WritePin(GPIOA, P1_G_Pin, 0);
 	}
 	else if(p1==0)
 	{
+		HAL_GPIO_WritePin(GPIOB, P1_R_Pin, 0);
 		HAL_GPIO_WritePin(GPIOA, P1_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P1_R_Pin, 0);
 	}
 
-	int p2 = HAL_GPIO_ReadPin(GPIOD, P2_Pin);
+	int p2 = HAL_GPIO_ReadPin(GPIOB, P2_Pin);
 	if(p2==1)
 	{
-		HAL_GPIO_WritePin(GPIOB, P2_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOB, P2_G_Pin, 0);
+		HAL_GPIO_WritePin(GPIOA, P2_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, P2_G_Pin, 0);
 	}
 	else if(p2==0)
 	{
-		HAL_GPIO_WritePin(GPIOB, P2_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOB, P2_R_Pin, 0);
+		HAL_GPIO_WritePin(GPIOE, P2_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOA, P2_R_Pin, 0);
 	}
 
 	int p3 = HAL_GPIO_ReadPin(GPIOD, P3_Pin);
 	if(p3==1)
 	{
-		HAL_GPIO_WritePin(GPIOA, P3_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, P3_R_Pin, 1);
 		HAL_GPIO_WritePin(GPIOE, P3_G_Pin, 0);
 	}
 	else if(p3==0)
 	{
 		HAL_GPIO_WritePin(GPIOE, P3_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOA, P3_R_Pin, 0);
+		HAL_GPIO_WritePin(GPIOE, P3_R_Pin, 0);
 	}
 
-	int p4 = HAL_GPIO_ReadPin(GPIOF, P4_Pin);
+	int p4 = HAL_GPIO_ReadPin(GPIOD, P4_Pin);
 	if(p4==1)
 	{
 		HAL_GPIO_WritePin(GPIOE, P4_R_Pin, 1);
@@ -158,7 +157,7 @@ int main(void)
 		HAL_GPIO_WritePin(GPIOE, P4_R_Pin, 0);
 	}
 
-	int p5 = HAL_GPIO_ReadPin(GPIOF, P5_Pin);
+	int p5 = HAL_GPIO_ReadPin(GPIOB, P5_Pin);
 	if(p5==1)
 	{
 		HAL_GPIO_WritePin(GPIOD, P5_R_Pin, 1);
@@ -170,29 +169,113 @@ int main(void)
 		HAL_GPIO_WritePin(GPIOD, P5_R_Pin, 0);
 	}
 
-	int p6i1 = HAL_GPIO_ReadPin(GPIOF, P6I1_Pin);
-	if(p6i1==1)
+	int p6 = HAL_GPIO_ReadPin(GPIOB, P6_Pin);
+	if(p6==1)
 	{
-		HAL_GPIO_WritePin(GPIOA, P6I1_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOD, P6I1_G_Pin, 0);
+		HAL_GPIO_WritePin(GPIOB, P6_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOA, P6_G_Pin, 0);
 	}
-	else if(p6i1==0)
+	else if(p6==0)
 	{
-		HAL_GPIO_WritePin(GPIOD, P6I1_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOA, P6I1_R_Pin, 0);
+		HAL_GPIO_WritePin(GPIOA, P6_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOB, P6_R_Pin, 0);
 	}
 
-	int p7i2 = HAL_GPIO_ReadPin(GPIOE, P7I2_Pin);
-	if(p7i2==1)
+	int p7 = HAL_GPIO_ReadPin(GPIOF, P7_Pin);
+	if(p7==1)
 	{
-		HAL_GPIO_WritePin(GPIOC, P7I2_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOD, P7I2_G_Pin, 0);
+		HAL_GPIO_WritePin(GPIOF, P7_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOG, P7_G_Pin, 0);
 	}
-	else if(p7i2==0)
+	else if(p7==0)
 	{
-		HAL_GPIO_WritePin(GPIOD, P7I2_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOC, P7I2_R_Pin, 0);
+		HAL_GPIO_WritePin(GPIOG, P7_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOF, P7_R_Pin, 0);
 	}
+
+	int p8 = HAL_GPIO_ReadPin(GPIOE, P8_Pin);
+	if(p8==1)
+	{
+		HAL_GPIO_WritePin(GPIOE, P8_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOG, P8_G_Pin, 0);
+	}
+	else if(p8==0)
+	{
+		HAL_GPIO_WritePin(GPIOG, P8_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, P8_R_Pin, 0);
+	}
+
+	int p9 = HAL_GPIO_ReadPin(GPIOE, P9_Pin);
+	if(p9==1)
+	{
+		HAL_GPIO_WritePin(GPIOE, P9_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOG, P9_G_Pin, 0);
+	}
+	else if(p9==0)
+	{
+		HAL_GPIO_WritePin(GPIOG, P9_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOE, P9_R_Pin, 0);
+	}
+
+	int p10 = HAL_GPIO_ReadPin(GPIOF, P10_Pin);
+	if(p10==1)
+	{
+		HAL_GPIO_WritePin(GPIOD, P10_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 0);
+	}
+	else if(p10==0)
+	{
+		HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOD, P10_R_Pin, 0);
+	}
+
+	int p11 = HAL_GPIO_ReadPin(GPIOG, P11_Pin);
+	if(p11==1)
+	{
+		HAL_GPIO_WritePin(GPIOG, P11_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOD, P11_G_Pin, 0);
+	}
+	else if(p11==0)
+	{
+		HAL_GPIO_WritePin(GPIOD, P11_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOG, P11_R_Pin, 0);
+	}
+
+	int p12 = HAL_GPIO_ReadPin(GPIOD, P12_Pin);
+	if(p12==1)
+	{
+		HAL_GPIO_WritePin(GPIOF, P12_R_Pin, 1);
+		HAL_GPIO_WritePin(GPIOF, P12_G_Pin, 0);
+	}
+	else if(p12==0)
+	{
+		HAL_GPIO_WritePin(GPIOF, P12_G_Pin, 1);
+		HAL_GPIO_WritePin(GPIOF, P12_R_Pin, 0);
+	}
+
+//	int p6i1 = HAL_GPIO_ReadPin(GPIOF, P6I1_Pin);
+//	if(p6i1==1)
+//	{
+//		HAL_GPIO_WritePin(GPIOA, P6I1_R_Pin, 1);
+//		HAL_GPIO_WritePin(GPIOD, P6I1_G_Pin, 0);
+//	}
+//	else if(p6i1==0)
+//	{
+//		HAL_GPIO_WritePin(GPIOD, P6I1_G_Pin, 1);
+//		HAL_GPIO_WritePin(GPIOA, P6I1_R_Pin, 0);
+//	}
+//
+//	int p7i2 = HAL_GPIO_ReadPin(GPIOE, P7I2_Pin);
+//	if(p7i2==1)
+//	{
+//		HAL_GPIO_WritePin(GPIOC, P7I2_R_Pin, 1);
+//		HAL_GPIO_WritePin(GPIOD, P7I2_G_Pin, 0);
+//	}
+//	else if(p7i2==0)
+//	{
+//		HAL_GPIO_WritePin(GPIOD, P7I2_G_Pin, 1);
+//		HAL_GPIO_WritePin(GPIOC, P7I2_R_Pin, 0);
+//	}
 
 
 
