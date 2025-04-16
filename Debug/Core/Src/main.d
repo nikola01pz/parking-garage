@@ -30,8 +30,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h \
  ../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h \
  ../Core/Inc/i2c.h ../Core/Inc/main.h ../Core/Inc/icache.h \
- ../Core/Inc/memorymap.h ../Core/Inc/tim.h ../Core/Inc/gpio.h \
- ../Core/Inc/i2c-lcd.h
+ ../Core/Inc/memorymap.h ../Core/Inc/tim.h ../Core/Inc/gpio.h
 ../Core/Inc/main.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h:
 ../Core/Inc/stm32h5xx_hal_conf.h:
@@ -69,4 +68,3 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/memorymap.h:
 ../Core/Inc/tim.h:
 ../Core/Inc/gpio.h:
-../Core/Inc/i2c-lcd.h:

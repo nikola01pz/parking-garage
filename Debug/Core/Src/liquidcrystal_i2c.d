@@ -1,5 +1,6 @@
-Core/Src/i2c-lcd.o: ../Core/Src/i2c-lcd.c ../Core/Inc/i2c-lcd.h \
- ../Core/Inc/main.h ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h \
+Core/Src/liquidcrystal_i2c.o: ../Core/Src/liquidcrystal_i2c.c \
+ ../Core/Inc/liquidcrystal_i2c.h \
+ ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h \
  ../Core/Inc/stm32h5xx_hal_conf.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_rcc.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_def.h \
@@ -28,8 +29,7 @@ Core/Src/i2c-lcd.o: ../Core/Src/i2c-lcd.c ../Core/Inc/i2c-lcd.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_tim.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_tim_ex.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h
-../Core/Inc/i2c-lcd.h:
-../Core/Inc/main.h:
+../Core/Inc/liquidcrystal_i2c.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h:
 ../Core/Inc/stm32h5xx_hal_conf.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_rcc.h:
