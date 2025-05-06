@@ -22,6 +22,7 @@
 #include "i2c.h"
 #include "icache.h"
 #include "memorymap.h"
+#include "rtc.h"
 #include "tim.h"
 #include "gpio.h"
 
@@ -95,9 +96,12 @@ int main(void)
   MX_I2C1_Init();
   MX_TIM3_Init();
   MX_ICACHE_Init();
+  MX_RTC_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+  HAL_TIM_Base_Start_IT(&htim7);
 
   /* USER CODE END 2 */
 
@@ -142,7 +146,8 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_CSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_CSI;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.CSIState = RCC_CSI_ON;
   RCC_OscInitStruct.CSICalibrationValue = RCC_CSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -182,6 +187,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+extern int parking_timeout[12];
 
 /* USER CODE END 4 */
 
@@ -196,7 +202,13 @@ void SystemClock_Config(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   /* USER CODE BEGIN Callback 0 */
-
+  if (htim->Instance == TIM7)
+  {
+	if(parking_timeout[9] == 1)
+	{
+		HAL_GPIO_TogglePin(GPIOD, P10_R_Pin);
+	}
+  }
   /* USER CODE END Callback 0 */
   if (htim->Instance == TIM6)
   {

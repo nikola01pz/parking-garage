@@ -6,6 +6,19 @@
 
 
 extern TIM_HandleTypeDef htim3;
+extern RTC_HandleTypeDef hrtc;
+
+int main_capacity = 10;
+int disabled_capacity = 2;
+char string_out[16];
+char buffer[100];
+int parking_timeout[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
+int parking_started[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
+RTC_TimeTypeDef sTime;
+RTC_DateTypeDef sDate;
+
+void raise_ramp(char channel);
+void update_availability();
 
 osThreadId_t rampControlTaskHandle;
 const osThreadAttr_t rampControlTask_attributes = {
@@ -21,16 +34,6 @@ const osThreadAttr_t parkingControlTask_attributes = {
   .stack_size = 128 * 4
 };
 
-int main_capacity = 10;
-int disabled_capacity = 2;
-char string_out[16];
-
-void raise_ramp(char channel);
-int check_main_capacity();
-int check_disabled_capacity();
-void update_availability();
-
-
 void MX_FREERTOS_Init(void) {
 
   rampControlTaskHandle = osThreadNew(StartRampControlTask, NULL, &rampControlTask_attributes);
@@ -41,12 +44,13 @@ void MX_FREERTOS_Init(void) {
 
 void StartRampControlTask(void *argument)
 {
-	HD44780_Init(2);
-	HD44780_Clear();
 	int updated = 1;
 	int total_capacity = 0;
 	int r1, old_r1 = 0;
 	int r2 = 0;
+
+	HD44780_Init(2);
+	HD44780_Clear();
 
 	for(;;)
 	{
@@ -95,23 +99,57 @@ void StartRampControlTask(void *argument)
 
 void StartParkingControlTask(void *argument)
 {
+	int parking = 0;
+	int timespan = 0;
+	int current_time = 0;
 
 	for(;;)
 	{
-		osDelay(10);
-		int new_main_capacity = check_main_capacity();
-		if(new_main_capacity != main_capacity)
+		HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+		HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+
+//		snprintf(buffer, sizeof(buffer), "Time:%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
+//		HD44780_Clear();
+//		HD44780_PrintStr(buffer);
+
+		int p10 = HAL_GPIO_ReadPin(GPIOF, P10_Pin);
+		if(p10==1)
 		{
-			main_capacity = new_main_capacity;
-			update_availability();
+
+
+			if(parking_started[9] == 0)
+			{
+			    HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+			    parking = sTime.Hours*60*60 + sTime.Minutes*60 + sTime.Seconds;
+
+				parking_started[9] = 1;
+				main_capacity--;
+			}
+
+			current_time = sTime.Hours*60*60 + sTime.Minutes*60 + sTime.Seconds;
+			timespan = current_time - parking;
+			if(timespan >=20)
+			{
+				parking_timeout[9] = 1;
+				HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 0);
+
+			} else
+			{
+				HAL_GPIO_WritePin(GPIOD, P10_R_Pin, 1);
+				HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 0);
+			}
+
+		}
+		else if(p10==0)
+		{
+			HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 1);
+			HAL_GPIO_WritePin(GPIOD, P10_R_Pin, 0);
+
+			parking_started[9] = 0;
+			parking_timeout[9] = 0;
+
 		}
 
-		int new_disabled_capacity = check_disabled_capacity();
-		if(new_disabled_capacity != disabled_capacity)
-		{
-			disabled_capacity = new_disabled_capacity;
-			update_availability();
-		}
 	}
 
 }
@@ -124,175 +162,6 @@ void update_availability()
 	HD44780_SetCursor(0, 1);
 	snprintf(string_out, sizeof(string_out), "Disabled Lot: %d", disabled_capacity);
 	HD44780_PrintStr(string_out);
-}
-
-int check_disabled_capacity()
-{
-	int capacity = 2;
-	int p11 = HAL_GPIO_ReadPin(GPIOG, P11_Pin);
-	if(p11==1)
-	{
-		HAL_GPIO_WritePin(GPIOG, P11_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOD, P11_G_Pin, 0);
-		capacity--;
-	}
-	else if(p11==0)
-	{
-		HAL_GPIO_WritePin(GPIOD, P11_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOG, P11_R_Pin, 0);
-	}
-
-	int p12 = HAL_GPIO_ReadPin(GPIOD, P12_Pin);
-	if(p12==1)
-	{
-		HAL_GPIO_WritePin(GPIOF, P12_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOF, P12_G_Pin, 0);
-		capacity--;
-	}
-	else if(p12==0)
-	{
-		HAL_GPIO_WritePin(GPIOF, P12_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOF, P12_R_Pin, 0);
-	}
-
-	return capacity;
-}
-
-int check_main_capacity()
-{
-	int capacity = 10;
-
-	int p1 = HAL_GPIO_ReadPin(GPIOE, P1_Pin);
-	if(p1==1)
-	{
-		HAL_GPIO_WritePin(GPIOB, P1_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOA, P1_G_Pin, 0);
-		capacity--;
-	}
-	else if(p1==0)
-	{
-		HAL_GPIO_WritePin(GPIOB, P1_R_Pin, 0);
-		HAL_GPIO_WritePin(GPIOA, P1_G_Pin, 1);
-	}
-
-	int p2 = HAL_GPIO_ReadPin(GPIOB, P2_Pin);
-	if(p2==1)
-	{
-		HAL_GPIO_WritePin(GPIOA, P2_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P2_G_Pin, 0);
-		capacity--;
-	}
-	else if(p2==0)
-	{
-		HAL_GPIO_WritePin(GPIOE, P2_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOA, P2_R_Pin, 0);
-	}
-
-	int p3 = HAL_GPIO_ReadPin(GPIOD, P3_Pin);
-	if(p3==1)
-	{
-		HAL_GPIO_WritePin(GPIOE, P3_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P3_G_Pin, 0);
-		capacity--;
-	}
-	else if(p3==0)
-	{
-		HAL_GPIO_WritePin(GPIOE, P3_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P3_R_Pin, 0);
-	}
-
-	int p4 = HAL_GPIO_ReadPin(GPIOD, P4_Pin);
-	if(p4==1)
-	{
-		HAL_GPIO_WritePin(GPIOE, P4_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P4_G_Pin, 0);
-		capacity--;
-	}
-	else if(p4==0)
-	{
-		HAL_GPIO_WritePin(GPIOE, P4_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P4_R_Pin, 0);
-	}
-
-	int p5 = HAL_GPIO_ReadPin(GPIOB, P5_Pin);
-	if(p5==1)
-	{
-		HAL_GPIO_WritePin(GPIOD, P5_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P5_G_Pin, 0);
-		capacity--;
-	}
-	else if(p5==0)
-	{
-		HAL_GPIO_WritePin(GPIOE, P5_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOD, P5_R_Pin, 0);
-	}
-
-	int p6 = HAL_GPIO_ReadPin(GPIOB, P6_Pin);
-	if(p6==1)
-	{
-		HAL_GPIO_WritePin(GPIOB, P6_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOA, P6_G_Pin, 0);
-		capacity--;
-	}
-	else if(p6==0)
-	{
-		HAL_GPIO_WritePin(GPIOA, P6_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOB, P6_R_Pin, 0);
-	}
-
-	int p7 = HAL_GPIO_ReadPin(GPIOF, P7_Pin);
-	if(p7==1)
-	{
-		HAL_GPIO_WritePin(GPIOF, P7_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOG, P7_G_Pin, 0);
-		capacity--;
-	}
-	else if(p7==0)
-	{
-		HAL_GPIO_WritePin(GPIOG, P7_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOF, P7_R_Pin, 0);
-	}
-
-	int p8 = HAL_GPIO_ReadPin(GPIOE, P8_Pin);
-	if(p8==1)
-	{
-		HAL_GPIO_WritePin(GPIOE, P8_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOG, P8_G_Pin, 0);
-		capacity--;
-	}
-	else if(p8==0)
-	{
-		HAL_GPIO_WritePin(GPIOG, P8_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P8_R_Pin, 0);
-	}
-
-	int p9 = HAL_GPIO_ReadPin(GPIOE, P9_Pin);
-	if(p9==1)
-	{
-		HAL_GPIO_WritePin(GPIOE, P9_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOG, P9_G_Pin, 0);
-		capacity--;
-	}
-	else if(p9==0)
-	{
-		HAL_GPIO_WritePin(GPIOG, P9_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOE, P9_R_Pin, 0);
-	}
-
-	int p10 = HAL_GPIO_ReadPin(GPIOF, P10_Pin);
-	if(p10==1)
-	{
-		HAL_GPIO_WritePin(GPIOD, P10_R_Pin, 1);
-		HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 0);
-		capacity--;
-	}
-	else if(p10==0)
-	{
-		HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 1);
-		HAL_GPIO_WritePin(GPIOD, P10_R_Pin, 0);
-	}
-
-	return capacity;
 }
 
 void raise_ramp(char channel)

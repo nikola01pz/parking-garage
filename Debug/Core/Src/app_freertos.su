@@ -1,7 +1,5 @@
-../Core/Src/app_freertos.c:34:6:MX_FREERTOS_Init	8	static
-../Core/Src/app_freertos.c:42:6:StartRampControlTask	40	static
-../Core/Src/app_freertos.c:96:6:StartParkingControlTask	24	static
-../Core/Src/app_freertos.c:119:6:update_availability	8	static
-../Core/Src/app_freertos.c:129:5:check_disabled_capacity	24	static
-../Core/Src/app_freertos.c:161:5:check_main_capacity	56	static
-../Core/Src/app_freertos.c:298:6:raise_ramp	24	static
+../Core/Src/app_freertos.c:37:6:MX_FREERTOS_Init	8	static
+../Core/Src/app_freertos.c:45:6:StartRampControlTask	40	static
+../Core/Src/app_freertos.c:100:6:StartParkingControlTask	32	static
+../Core/Src/app_freertos.c:157:6:update_availability	8	static
+../Core/Src/app_freertos.c:167:6:raise_ramp	24	static
