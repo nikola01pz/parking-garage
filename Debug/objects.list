@@ -5,6 +5,7 @@
 "./Core/Src/liquidcrystal_i2c.o"
 "./Core/Src/main.o"
 "./Core/Src/memorymap.o"
+"./Core/Src/parking_check.o"
 "./Core/Src/rtc.o"
 "./Core/Src/stm32h5xx_hal_msp.o"
 "./Core/Src/stm32h5xx_hal_timebase_tim.o"

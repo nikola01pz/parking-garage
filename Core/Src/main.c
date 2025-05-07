@@ -204,11 +204,43 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   /* USER CODE BEGIN Callback 0 */
   if (htim->Instance == TIM7)
   {
+	if(parking_timeout[0] == 1)
+		HAL_GPIO_TogglePin(GPIOB, P1_R_Pin);
+
+	if(parking_timeout[1] == 1)
+		HAL_GPIO_TogglePin(GPIOA, P2_R_Pin);
+
+	if(parking_timeout[2] == 1)
+		HAL_GPIO_TogglePin(GPIOE, P3_R_Pin);
+
+	if(parking_timeout[3] == 1)
+		HAL_GPIO_TogglePin(GPIOE, P4_R_Pin);
+
+	if(parking_timeout[4] == 1)
+		HAL_GPIO_TogglePin(GPIOD, P5_R_Pin);
+
+	if(parking_timeout[5] == 1)
+		HAL_GPIO_TogglePin(GPIOB, P6_R_Pin);
+
+	if(parking_timeout[6] == 1)
+		HAL_GPIO_TogglePin(GPIOF, P7_R_Pin);
+
+	if(parking_timeout[7] == 1)
+		HAL_GPIO_TogglePin(GPIOE, P8_R_Pin);
+
+	if(parking_timeout[8] == 1)
+		HAL_GPIO_TogglePin(GPIOE, P9_R_Pin);
+
 	if(parking_timeout[9] == 1)
-	{
 		HAL_GPIO_TogglePin(GPIOD, P10_R_Pin);
-	}
+
+	if(parking_timeout[10] == 1)
+		HAL_GPIO_TogglePin(GPIOG, P11_R_Pin);
+
+	if(parking_timeout[11] == 1)
+		HAL_GPIO_TogglePin(GPIOF, P12_R_Pin);
   }
+
   /* USER CODE END Callback 0 */
   if (htim->Instance == TIM6)
   {

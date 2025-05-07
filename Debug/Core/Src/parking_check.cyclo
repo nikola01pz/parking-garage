@@ -1,0 +1,12 @@
+../Core/Src/parking_check.c:18:6:check_parking1	5
+../Core/Src/parking_check.c:54:6:check_parking2	5
+../Core/Src/parking_check.c:90:6:check_parking3	5
+../Core/Src/parking_check.c:126:6:check_parking4	5
+../Core/Src/parking_check.c:162:6:check_parking5	5
+../Core/Src/parking_check.c:198:6:check_parking6	5
+../Core/Src/parking_check.c:234:6:check_parking7	5
+../Core/Src/parking_check.c:270:6:check_parking8	5
+../Core/Src/parking_check.c:306:6:check_parking9	5
+../Core/Src/parking_check.c:343:6:check_parking10	5
+../Core/Src/parking_check.c:379:6:check_parking11	5
+../Core/Src/parking_check.c:415:6:check_parking12	5
