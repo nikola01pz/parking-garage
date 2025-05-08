@@ -28,7 +28,7 @@ void check_parking1()
 			parking_started[0] = 1;
 		}
 
-		int timespan = current_seconds - parking_time[7];
+		int timespan = current_seconds - parking_time[0];
 		if(timespan >= TIME_LIMIT)
 		{
 			parking_timeout[0] = 1;
@@ -64,7 +64,7 @@ void check_parking2()
 			parking_started[1] = 1;
 		}
 
-		int timespan = current_seconds - parking_time[8];
+		int timespan = current_seconds - parking_time[1];
 		if(timespan >= TIME_LIMIT)
 		{
 			parking_timeout[1] = 1;
@@ -361,14 +361,14 @@ void check_parking10()
 
 		} else
 		{
-			HAL_GPIO_WritePin(GPIOD, P10_R_Pin, 1);
+			HAL_GPIO_WritePin(GPIOB, P10_R_Pin, 1);
 			HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 0);
 		}
 
 	}
 	else if(parking==0)
 	{
-		HAL_GPIO_WritePin(GPIOD, P10_R_Pin, 0);
+		HAL_GPIO_WritePin(GPIOB, P10_R_Pin, 0);
 		HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 1);
 
 		parking_started[9] = 0;

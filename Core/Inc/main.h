@@ -113,8 +113,6 @@ void Error_Handler(void);
 #define P5_R_GPIO_Port GPIOD
 #define P10_G_Pin GPIO_PIN_14
 #define P10_G_GPIO_Port GPIOD
-#define P10_R_Pin GPIO_PIN_15
-#define P10_R_GPIO_Port GPIOD
 #define P7_G_Pin GPIO_PIN_6
 #define P7_G_GPIO_Port GPIOG
 #define SG_ENTER_Pin GPIO_PIN_6
@@ -131,6 +129,8 @@ void Error_Handler(void);
 #define P9_G_GPIO_Port GPIOG
 #define P8_G_Pin GPIO_PIN_14
 #define P8_G_GPIO_Port GPIOG
+#define P10_R_Pin GPIO_PIN_5
+#define P10_R_GPIO_Port GPIOB
 #define P6_Pin GPIO_PIN_8
 #define P6_GPIO_Port GPIOB
 #define P6_R_Pin GPIO_PIN_9

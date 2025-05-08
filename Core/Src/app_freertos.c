@@ -5,6 +5,8 @@
 #include "liquidcrystal_i2c.h"
 #include "parking_check.h"
 
+#define MAX_CAPACITY 4
+
 extern TIM_HandleTypeDef htim3;
 extern RTC_HandleTypeDef hrtc;
 
@@ -75,10 +77,10 @@ void StartRampControlTask(void *argument)
 
 		if((r1==1) && (old_r1 != r1))
 		{
-			if(total_capacity == 12)
+			if(total_capacity == MAX_CAPACITY)
 			{
 				HD44780_Clear();
-				HD44780_PrintStr("Parking full");
+				HD44780_PrintStr("Parking full.");
 			} else
 			{
 				HD44780_Clear();

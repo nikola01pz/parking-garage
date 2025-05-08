@@ -232,7 +232,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		HAL_GPIO_TogglePin(GPIOE, P9_R_Pin);
 
 	if(parking_timeout[9] == 1)
-		HAL_GPIO_TogglePin(GPIOD, P10_R_Pin);
+		HAL_GPIO_TogglePin(GPIOB, P10_R_Pin);
 
 	if(parking_timeout[10] == 1)
 		HAL_GPIO_TogglePin(GPIOG, P11_R_Pin);

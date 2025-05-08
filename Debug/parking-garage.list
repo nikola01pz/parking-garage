@@ -35,17 +35,17 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  15 .debug_rnglists 000017f7  00000000  00000000  00035ef8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00036c74  00000000  00000000  000376ef  2**0
+ 16 .debug_macro  00036c7a  00000000  00000000  000376ef  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0002542c  00000000  00000000  0006e363  2**0
+ 17 .debug_line   0002542c  00000000  00000000  0006e369  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    001561f8  00000000  00000000  0009378f  2**0
+ 18 .debug_str    00156206  00000000  00000000  00093795  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  001e9987  2**0
+ 19 .comment      00000043  00000000  00000000  001e999b  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000084ac  00000000  00000000  001e99cc  2**2
+ 20 .debug_frame  000084ac  00000000  00000000  001e99e0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 0000005a  00000000  00000000  001f1e78  2**0
+ 21 .debug_line_str 0000005a  00000000  00000000  001f1e8c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -181,14 +181,14 @@ void StartRampControlTask(void *argument)
  8000326:	429a      	cmp	r2, r3
  8000328:	d015      	beq.n	8000356 <StartRampControlTask+0x86>
 		{
-			if(total_capacity == 12)
+			if(total_capacity == MAX_CAPACITY)
  800032a:	69bb      	ldr	r3, [r7, #24]
- 800032c:	2b0c      	cmp	r3, #12
+ 800032c:	2b04      	cmp	r3, #4
  800032e:	d105      	bne.n	800033c <StartRampControlTask+0x6c>
 			{
 				HD44780_Clear();
  8000330:	f000 fc9c 	bl	8000c6c <HD44780_Clear>
-				HD44780_PrintStr("Parking full");
+				HD44780_PrintStr("Parking full.");
  8000334:	4813      	ldr	r0, [pc, #76]	@ (8000384 <StartRampControlTask+0xb4>)
  8000336:	f000 fd21 	bl	8000d7c <HD44780_PrintStr>
  800033a:	e00c      	b.n	8000356 <StartRampControlTask+0x86>
@@ -899,16 +899,16 @@ void MX_GPIO_Init(void)
  8000844:	f001 ffc6 	bl	80027d4 <HAL_GPIO_WritePin>
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, P1_R_Pin|P6_R_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, P1_R_Pin|P10_R_Pin|P6_R_Pin, GPIO_PIN_RESET);
  8000848:	2200      	movs	r2, #0
- 800084a:	f44f 61c0 	mov.w	r1, #1536	@ 0x600
+ 800084a:	f44f 61c4 	mov.w	r1, #1568	@ 0x620
  800084e:	4858      	ldr	r0, [pc, #352]	@ (80009b0 <MX_GPIO_Init+0x29c>)
  8000850:	f001 ffc0 	bl	80027d4 <HAL_GPIO_WritePin>
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, P5_R_Pin|P10_G_Pin|P10_R_Pin|P11_G_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, P5_R_Pin|P10_G_Pin|P11_G_Pin, GPIO_PIN_RESET);
  8000854:	2200      	movs	r2, #0
- 8000856:	f24e 0102 	movw	r1, #57346	@ 0xe002
+ 8000856:	f246 0102 	movw	r1, #24578	@ 0x6002
  800085a:	4856      	ldr	r0, [pc, #344]	@ (80009b4 <MX_GPIO_Init+0x2a0>)
  800085c:	f001 ffba 	bl	80027d4 <HAL_GPIO_WritePin>
 
@@ -1054,9 +1054,9 @@ void MX_GPIO_Init(void)
  8000938:	4819      	ldr	r0, [pc, #100]	@ (80009a0 <MX_GPIO_Init+0x28c>)
  800093a:	f001 fdd5 	bl	80024e8 <HAL_GPIO_Init>
 
-  /*Configure GPIO pins : P1_R_Pin P6_R_Pin */
-  GPIO_InitStruct.Pin = P1_R_Pin|P6_R_Pin;
- 800093e:	f44f 63c0 	mov.w	r3, #1536	@ 0x600
+  /*Configure GPIO pins : P1_R_Pin P10_R_Pin P6_R_Pin */
+  GPIO_InitStruct.Pin = P1_R_Pin|P10_R_Pin|P6_R_Pin;
+ 800093e:	f44f 63c4 	mov.w	r3, #1568	@ 0x620
  8000942:	627b      	str	r3, [r7, #36]	@ 0x24
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
  8000944:	2301      	movs	r3, #1
@@ -1089,9 +1089,9 @@ void MX_GPIO_Init(void)
  8000970:	4810      	ldr	r0, [pc, #64]	@ (80009b4 <MX_GPIO_Init+0x2a0>)
  8000972:	f001 fdb9 	bl	80024e8 <HAL_GPIO_Init>
 
-  /*Configure GPIO pins : P5_R_Pin P10_G_Pin P10_R_Pin P11_G_Pin */
-  GPIO_InitStruct.Pin = P5_R_Pin|P10_G_Pin|P10_R_Pin|P11_G_Pin;
- 8000976:	f24e 0302 	movw	r3, #57346	@ 0xe002
+  /*Configure GPIO pins : P5_R_Pin P10_G_Pin P11_G_Pin */
+  GPIO_InitStruct.Pin = P5_R_Pin|P10_G_Pin|P11_G_Pin;
+ 8000976:	f246 0302 	movw	r3, #24578	@ 0x6002
  800097a:	627b      	str	r3, [r7, #36]	@ 0x24
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
  800097c:	2301      	movs	r3, #1
@@ -2258,7 +2258,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  80010a6:	681b      	ldr	r3, [r3, #0]
  80010a8:	4a3a      	ldr	r2, [pc, #232]	@ (8001194 <HAL_TIM_PeriodElapsedCallback+0xf8>)
  80010aa:	4293      	cmp	r3, r2
- 80010ac:	d167      	bne.n	800117e <HAL_TIM_PeriodElapsedCallback+0xe2>
+ 80010ac:	d166      	bne.n	800117c <HAL_TIM_PeriodElapsedCallback+0xe0>
   {
 	if(parking_timeout[0] == 1)
  80010ae:	4b3a      	ldr	r3, [pc, #232]	@ (8001198 <HAL_TIM_PeriodElapsedCallback+0xfc>)
@@ -2354,52 +2354,53 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  800114c:	4b12      	ldr	r3, [pc, #72]	@ (8001198 <HAL_TIM_PeriodElapsedCallback+0xfc>)
  800114e:	6a5b      	ldr	r3, [r3, #36]	@ 0x24
  8001150:	2b01      	cmp	r3, #1
- 8001152:	d104      	bne.n	800115e <HAL_TIM_PeriodElapsedCallback+0xc2>
-		HAL_GPIO_TogglePin(GPIOD, P10_R_Pin);
- 8001154:	f44f 4100 	mov.w	r1, #32768	@ 0x8000
- 8001158:	4813      	ldr	r0, [pc, #76]	@ (80011a8 <HAL_TIM_PeriodElapsedCallback+0x10c>)
- 800115a:	f001 fb53 	bl	8002804 <HAL_GPIO_TogglePin>
+ 8001152:	d103      	bne.n	800115c <HAL_TIM_PeriodElapsedCallback+0xc0>
+		HAL_GPIO_TogglePin(GPIOB, P10_R_Pin);
+ 8001154:	2120      	movs	r1, #32
+ 8001156:	4811      	ldr	r0, [pc, #68]	@ (800119c <HAL_TIM_PeriodElapsedCallback+0x100>)
+ 8001158:	f001 fb54 	bl	8002804 <HAL_GPIO_TogglePin>
 
 	if(parking_timeout[10] == 1)
- 800115e:	4b0e      	ldr	r3, [pc, #56]	@ (8001198 <HAL_TIM_PeriodElapsedCallback+0xfc>)
- 8001160:	6a9b      	ldr	r3, [r3, #40]	@ 0x28
- 8001162:	2b01      	cmp	r3, #1
- 8001164:	d103      	bne.n	800116e <HAL_TIM_PeriodElapsedCallback+0xd2>
+ 800115c:	4b0e      	ldr	r3, [pc, #56]	@ (8001198 <HAL_TIM_PeriodElapsedCallback+0xfc>)
+ 800115e:	6a9b      	ldr	r3, [r3, #40]	@ 0x28
+ 8001160:	2b01      	cmp	r3, #1
+ 8001162:	d103      	bne.n	800116c <HAL_TIM_PeriodElapsedCallback+0xd0>
 		HAL_GPIO_TogglePin(GPIOG, P11_R_Pin);
- 8001166:	2101      	movs	r1, #1
- 8001168:	4811      	ldr	r0, [pc, #68]	@ (80011b0 <HAL_TIM_PeriodElapsedCallback+0x114>)
- 800116a:	f001 fb4b 	bl	8002804 <HAL_GPIO_TogglePin>
+ 8001164:	2101      	movs	r1, #1
+ 8001166:	4812      	ldr	r0, [pc, #72]	@ (80011b0 <HAL_TIM_PeriodElapsedCallback+0x114>)
+ 8001168:	f001 fb4c 	bl	8002804 <HAL_GPIO_TogglePin>
 
 	if(parking_timeout[11] == 1)
- 800116e:	4b0a      	ldr	r3, [pc, #40]	@ (8001198 <HAL_TIM_PeriodElapsedCallback+0xfc>)
- 8001170:	6adb      	ldr	r3, [r3, #44]	@ 0x2c
- 8001172:	2b01      	cmp	r3, #1
- 8001174:	d103      	bne.n	800117e <HAL_TIM_PeriodElapsedCallback+0xe2>
+ 800116c:	4b0a      	ldr	r3, [pc, #40]	@ (8001198 <HAL_TIM_PeriodElapsedCallback+0xfc>)
+ 800116e:	6adb      	ldr	r3, [r3, #44]	@ 0x2c
+ 8001170:	2b01      	cmp	r3, #1
+ 8001172:	d103      	bne.n	800117c <HAL_TIM_PeriodElapsedCallback+0xe0>
 		HAL_GPIO_TogglePin(GPIOF, P12_R_Pin);
- 8001176:	2180      	movs	r1, #128	@ 0x80
- 8001178:	480c      	ldr	r0, [pc, #48]	@ (80011ac <HAL_TIM_PeriodElapsedCallback+0x110>)
- 800117a:	f001 fb43 	bl	8002804 <HAL_GPIO_TogglePin>
+ 8001174:	2180      	movs	r1, #128	@ 0x80
+ 8001176:	480d      	ldr	r0, [pc, #52]	@ (80011ac <HAL_TIM_PeriodElapsedCallback+0x110>)
+ 8001178:	f001 fb44 	bl	8002804 <HAL_GPIO_TogglePin>
   }
 
   /* USER CODE END Callback 0 */
   if (htim->Instance == TIM6)
- 800117e:	687b      	ldr	r3, [r7, #4]
- 8001180:	681b      	ldr	r3, [r3, #0]
- 8001182:	4a0c      	ldr	r2, [pc, #48]	@ (80011b4 <HAL_TIM_PeriodElapsedCallback+0x118>)
- 8001184:	4293      	cmp	r3, r2
- 8001186:	d101      	bne.n	800118c <HAL_TIM_PeriodElapsedCallback+0xf0>
+ 800117c:	687b      	ldr	r3, [r7, #4]
+ 800117e:	681b      	ldr	r3, [r3, #0]
+ 8001180:	4a0c      	ldr	r2, [pc, #48]	@ (80011b4 <HAL_TIM_PeriodElapsedCallback+0x118>)
+ 8001182:	4293      	cmp	r3, r2
+ 8001184:	d101      	bne.n	800118a <HAL_TIM_PeriodElapsedCallback+0xee>
   {
     HAL_IncTick();
- 8001188:	f001 f832 	bl	80021f0 <HAL_IncTick>
+ 8001186:	f001 f833 	bl	80021f0 <HAL_IncTick>
   }
   /* USER CODE BEGIN Callback 1 */
 
   /* USER CODE END Callback 1 */
 }
- 800118c:	bf00      	nop
- 800118e:	3708      	adds	r7, #8
- 8001190:	46bd      	mov	sp, r7
- 8001192:	bd80      	pop	{r7, pc}
+ 800118a:	bf00      	nop
+ 800118c:	3708      	adds	r7, #8
+ 800118e:	46bd      	mov	sp, r7
+ 8001190:	bd80      	pop	{r7, pc}
+ 8001192:	bf00      	nop
  8001194:	40001400 	.word	0x40001400
  8001198:	20000108 	.word	0x20000108
  800119c:	42020400 	.word	0x42020400
@@ -2475,11 +2476,11 @@ void check_parking1()
  80011f0:	601a      	str	r2, [r3, #0]
 		}
 
-		int timespan = current_seconds - parking_time[7];
+		int timespan = current_seconds - parking_time[0];
  80011f2:	4b1d      	ldr	r3, [pc, #116]	@ (8001268 <check_parking1+0xa4>)
  80011f4:	681a      	ldr	r2, [r3, #0]
  80011f6:	4b1d      	ldr	r3, [pc, #116]	@ (800126c <check_parking1+0xa8>)
- 80011f8:	69db      	ldr	r3, [r3, #28]
+ 80011f8:	681b      	ldr	r3, [r3, #0]
  80011fa:	1ad3      	subs	r3, r2, r3
  80011fc:	603b      	str	r3, [r7, #0]
 		if(timespan >= TIME_LIMIT)
@@ -2588,11 +2589,11 @@ void check_parking2()
  80012a8:	605a      	str	r2, [r3, #4]
 		}
 
-		int timespan = current_seconds - parking_time[8];
+		int timespan = current_seconds - parking_time[1];
  80012aa:	4b1d      	ldr	r3, [pc, #116]	@ (8001320 <check_parking2+0xa4>)
  80012ac:	681a      	ldr	r2, [r3, #0]
  80012ae:	4b1d      	ldr	r3, [pc, #116]	@ (8001324 <check_parking2+0xa8>)
- 80012b0:	6a1b      	ldr	r3, [r3, #32]
+ 80012b0:	685b      	ldr	r3, [r3, #4]
  80012b2:	1ad3      	subs	r3, r2, r3
  80012b4:	603b      	str	r3, [r7, #0]
 		if(timespan >= TIME_LIMIT)
@@ -3454,7 +3455,7 @@ void check_parking10()
  8001840:	af00      	add	r7, sp, #0
 	int parking = HAL_GPIO_ReadPin(GPIOF, P10_Pin);
  8001842:	2108      	movs	r1, #8
- 8001844:	4825      	ldr	r0, [pc, #148]	@ (80018dc <check_parking10+0xa0>)
+ 8001844:	4824      	ldr	r0, [pc, #144]	@ (80018d8 <check_parking10+0x9c>)
  8001846:	f000 ffad 	bl	80027a4 <HAL_GPIO_ReadPin>
  800184a:	4603      	mov	r3, r0
  800184c:	607b      	str	r3, [r7, #4]
@@ -3462,30 +3463,30 @@ void check_parking10()
 	if(parking == 1)
  800184e:	687b      	ldr	r3, [r7, #4]
  8001850:	2b01      	cmp	r3, #1
- 8001852:	d12a      	bne.n	80018aa <check_parking10+0x6e>
+ 8001852:	d129      	bne.n	80018a8 <check_parking10+0x6c>
 	{
 
 		if(parking_started[9] == 0)
- 8001854:	4b22      	ldr	r3, [pc, #136]	@ (80018e0 <check_parking10+0xa4>)
+ 8001854:	4b21      	ldr	r3, [pc, #132]	@ (80018dc <check_parking10+0xa0>)
  8001856:	6a5b      	ldr	r3, [r3, #36]	@ 0x24
  8001858:	2b00      	cmp	r3, #0
  800185a:	d106      	bne.n	800186a <check_parking10+0x2e>
 		{
 			parking_time[9] = current_seconds;
- 800185c:	4b21      	ldr	r3, [pc, #132]	@ (80018e4 <check_parking10+0xa8>)
+ 800185c:	4b20      	ldr	r3, [pc, #128]	@ (80018e0 <check_parking10+0xa4>)
  800185e:	681b      	ldr	r3, [r3, #0]
- 8001860:	4a21      	ldr	r2, [pc, #132]	@ (80018e8 <check_parking10+0xac>)
+ 8001860:	4a20      	ldr	r2, [pc, #128]	@ (80018e4 <check_parking10+0xa8>)
  8001862:	6253      	str	r3, [r2, #36]	@ 0x24
 			parking_started[9] = 1;
- 8001864:	4b1e      	ldr	r3, [pc, #120]	@ (80018e0 <check_parking10+0xa4>)
+ 8001864:	4b1d      	ldr	r3, [pc, #116]	@ (80018dc <check_parking10+0xa0>)
  8001866:	2201      	movs	r2, #1
  8001868:	625a      	str	r2, [r3, #36]	@ 0x24
 		}
 
 		int timespan = current_seconds - parking_time[9];
- 800186a:	4b1e      	ldr	r3, [pc, #120]	@ (80018e4 <check_parking10+0xa8>)
+ 800186a:	4b1d      	ldr	r3, [pc, #116]	@ (80018e0 <check_parking10+0xa4>)
  800186c:	681a      	ldr	r2, [r3, #0]
- 800186e:	4b1e      	ldr	r3, [pc, #120]	@ (80018e8 <check_parking10+0xac>)
+ 800186e:	4b1d      	ldr	r3, [pc, #116]	@ (80018e4 <check_parking10+0xa8>)
  8001870:	6a5b      	ldr	r3, [r3, #36]	@ 0x24
  8001872:	1ad3      	subs	r3, r2, r3
  8001874:	603b      	str	r3, [r7, #0]
@@ -3495,13 +3496,13 @@ void check_parking10()
  800187a:	dd09      	ble.n	8001890 <check_parking10+0x54>
 		{
 			parking_timeout[9] = 1;
- 800187c:	4b1b      	ldr	r3, [pc, #108]	@ (80018ec <check_parking10+0xb0>)
+ 800187c:	4b1a      	ldr	r3, [pc, #104]	@ (80018e8 <check_parking10+0xac>)
  800187e:	2201      	movs	r2, #1
  8001880:	625a      	str	r2, [r3, #36]	@ 0x24
 			HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 0);
  8001882:	2200      	movs	r2, #0
  8001884:	f44f 4180 	mov.w	r1, #16384	@ 0x4000
- 8001888:	4819      	ldr	r0, [pc, #100]	@ (80018f0 <check_parking10+0xb4>)
+ 8001888:	4818      	ldr	r0, [pc, #96]	@ (80018ec <check_parking10+0xb0>)
  800188a:	f000 ffa3 	bl	80027d4 <HAL_GPIO_WritePin>
 		HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 1);
 
@@ -3509,52 +3510,53 @@ void check_parking10()
 		parking_timeout[9] = 0;
 	}
 }
- 800188e:	e021      	b.n	80018d4 <check_parking10+0x98>
-			HAL_GPIO_WritePin(GPIOD, P10_R_Pin, 1);
+ 800188e:	e01f      	b.n	80018d0 <check_parking10+0x94>
+			HAL_GPIO_WritePin(GPIOB, P10_R_Pin, 1);
  8001890:	2201      	movs	r2, #1
- 8001892:	f44f 4100 	mov.w	r1, #32768	@ 0x8000
- 8001896:	4816      	ldr	r0, [pc, #88]	@ (80018f0 <check_parking10+0xb4>)
- 8001898:	f000 ff9c 	bl	80027d4 <HAL_GPIO_WritePin>
+ 8001892:	2120      	movs	r1, #32
+ 8001894:	4816      	ldr	r0, [pc, #88]	@ (80018f0 <check_parking10+0xb4>)
+ 8001896:	f000 ff9d 	bl	80027d4 <HAL_GPIO_WritePin>
 			HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 0);
- 800189c:	2200      	movs	r2, #0
- 800189e:	f44f 4180 	mov.w	r1, #16384	@ 0x4000
- 80018a2:	4813      	ldr	r0, [pc, #76]	@ (80018f0 <check_parking10+0xb4>)
- 80018a4:	f000 ff96 	bl	80027d4 <HAL_GPIO_WritePin>
+ 800189a:	2200      	movs	r2, #0
+ 800189c:	f44f 4180 	mov.w	r1, #16384	@ 0x4000
+ 80018a0:	4812      	ldr	r0, [pc, #72]	@ (80018ec <check_parking10+0xb0>)
+ 80018a2:	f000 ff97 	bl	80027d4 <HAL_GPIO_WritePin>
 }
- 80018a8:	e014      	b.n	80018d4 <check_parking10+0x98>
+ 80018a6:	e013      	b.n	80018d0 <check_parking10+0x94>
 	else if(parking==0)
- 80018aa:	687b      	ldr	r3, [r7, #4]
- 80018ac:	2b00      	cmp	r3, #0
- 80018ae:	d111      	bne.n	80018d4 <check_parking10+0x98>
-		HAL_GPIO_WritePin(GPIOD, P10_R_Pin, 0);
- 80018b0:	2200      	movs	r2, #0
- 80018b2:	f44f 4100 	mov.w	r1, #32768	@ 0x8000
- 80018b6:	480e      	ldr	r0, [pc, #56]	@ (80018f0 <check_parking10+0xb4>)
- 80018b8:	f000 ff8c 	bl	80027d4 <HAL_GPIO_WritePin>
+ 80018a8:	687b      	ldr	r3, [r7, #4]
+ 80018aa:	2b00      	cmp	r3, #0
+ 80018ac:	d110      	bne.n	80018d0 <check_parking10+0x94>
+		HAL_GPIO_WritePin(GPIOB, P10_R_Pin, 0);
+ 80018ae:	2200      	movs	r2, #0
+ 80018b0:	2120      	movs	r1, #32
+ 80018b2:	480f      	ldr	r0, [pc, #60]	@ (80018f0 <check_parking10+0xb4>)
+ 80018b4:	f000 ff8e 	bl	80027d4 <HAL_GPIO_WritePin>
 		HAL_GPIO_WritePin(GPIOD, P10_G_Pin, 1);
- 80018bc:	2201      	movs	r2, #1
- 80018be:	f44f 4180 	mov.w	r1, #16384	@ 0x4000
- 80018c2:	480b      	ldr	r0, [pc, #44]	@ (80018f0 <check_parking10+0xb4>)
- 80018c4:	f000 ff86 	bl	80027d4 <HAL_GPIO_WritePin>
+ 80018b8:	2201      	movs	r2, #1
+ 80018ba:	f44f 4180 	mov.w	r1, #16384	@ 0x4000
+ 80018be:	480b      	ldr	r0, [pc, #44]	@ (80018ec <check_parking10+0xb0>)
+ 80018c0:	f000 ff88 	bl	80027d4 <HAL_GPIO_WritePin>
 		parking_started[9] = 0;
- 80018c8:	4b05      	ldr	r3, [pc, #20]	@ (80018e0 <check_parking10+0xa4>)
- 80018ca:	2200      	movs	r2, #0
- 80018cc:	625a      	str	r2, [r3, #36]	@ 0x24
+ 80018c4:	4b05      	ldr	r3, [pc, #20]	@ (80018dc <check_parking10+0xa0>)
+ 80018c6:	2200      	movs	r2, #0
+ 80018c8:	625a      	str	r2, [r3, #36]	@ 0x24
 		parking_timeout[9] = 0;
- 80018ce:	4b07      	ldr	r3, [pc, #28]	@ (80018ec <check_parking10+0xb0>)
- 80018d0:	2200      	movs	r2, #0
- 80018d2:	625a      	str	r2, [r3, #36]	@ 0x24
+ 80018ca:	4b07      	ldr	r3, [pc, #28]	@ (80018e8 <check_parking10+0xac>)
+ 80018cc:	2200      	movs	r2, #0
+ 80018ce:	625a      	str	r2, [r3, #36]	@ 0x24
 }
- 80018d4:	bf00      	nop
- 80018d6:	3708      	adds	r7, #8
- 80018d8:	46bd      	mov	sp, r7
- 80018da:	bd80      	pop	{r7, pc}
- 80018dc:	42021400 	.word	0x42021400
- 80018e0:	200000a8 	.word	0x200000a8
- 80018e4:	200000a4 	.word	0x200000a4
- 80018e8:	200000d8 	.word	0x200000d8
- 80018ec:	20000108 	.word	0x20000108
- 80018f0:	42020c00 	.word	0x42020c00
+ 80018d0:	bf00      	nop
+ 80018d2:	3708      	adds	r7, #8
+ 80018d4:	46bd      	mov	sp, r7
+ 80018d6:	bd80      	pop	{r7, pc}
+ 80018d8:	42021400 	.word	0x42021400
+ 80018dc:	200000a8 	.word	0x200000a8
+ 80018e0:	200000a4 	.word	0x200000a4
+ 80018e4:	200000d8 	.word	0x200000d8
+ 80018e8:	20000108 	.word	0x20000108
+ 80018ec:	42020c00 	.word	0x42020c00
+ 80018f0:	42020400 	.word	0x42020400
 
 080018f4 <check_parking11>:
 

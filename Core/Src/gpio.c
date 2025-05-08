@@ -65,10 +65,10 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOG, P11_R_Pin|P7_G_Pin|P9_G_Pin|P8_G_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, P1_R_Pin|P6_R_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, P1_R_Pin|P10_R_Pin|P6_R_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, P5_R_Pin|P10_G_Pin|P10_R_Pin|P11_G_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, P5_R_Pin|P10_G_Pin|P11_G_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : P3_G_Pin P4_R_Pin P5_G_Pin P9_R_Pin
                            P4_G_Pin P3_R_Pin P8_R_Pin P2_G_Pin */
@@ -124,8 +124,8 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : P1_R_Pin P6_R_Pin */
-  GPIO_InitStruct.Pin = P1_R_Pin|P6_R_Pin;
+  /*Configure GPIO pins : P1_R_Pin P10_R_Pin P6_R_Pin */
+  GPIO_InitStruct.Pin = P1_R_Pin|P10_R_Pin|P6_R_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -137,8 +137,8 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : P5_R_Pin P10_G_Pin P10_R_Pin P11_G_Pin */
-  GPIO_InitStruct.Pin = P5_R_Pin|P10_G_Pin|P10_R_Pin|P11_G_Pin;
+  /*Configure GPIO pins : P5_R_Pin P10_G_Pin P11_G_Pin */
+  GPIO_InitStruct.Pin = P5_R_Pin|P10_G_Pin|P11_G_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
